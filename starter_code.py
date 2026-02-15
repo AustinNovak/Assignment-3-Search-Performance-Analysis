@@ -19,23 +19,13 @@ def linear_search(data, target):
     Linear search checks each element sequentially until finding the target
     or reaching the end of the list.
     
-    Args:
-        data (list): List to search (can be sorted or unsorted)
-        target: Item to find
-    
     Returns:
         int: Index of target if found, -1 if not found
-    
-    Time Complexity: O(n) - must check up to n elements
-    Space Complexity: O(1) - uses constant extra space
-    
-    Example:
-        linear_search([5, 2, 8, 1, 9], 8) returns 2
-        linear_search([5, 2, 8, 1, 9], 7) returns -1
     """
-    # TODO: Implement linear search that loops through each element and returns its index if found and -1 if not found.
-    
-    pass # Delete pass and write your code here
+    for i in range(len(data)):
+        if data[i] == target:
+            return i
+    return -1
 
 
 # ============================================================================
@@ -46,28 +36,23 @@ def binary_search_iterative(data, target):
     """
     Search for target in SORTED data using iterative binary search.
     
-    Binary search repeatedly divides the search space in half by comparing
-    the target to the middle element.
-    
-    Args:
-        data (list): SORTED list to search
-        target: Item to find
-    
     Returns:
         int: Index of target if found, -1 if not found
-    
-    Time Complexity: O(log n) - divides search space in half each iteration
-    Space Complexity: O(1) - uses constant extra space
-    
-    IMPORTANT: This only works on SORTED data!
-    
-    Example:
-        binary_search_iterative([1, 2, 5, 8, 9], 8) returns 3
-        binary_search_iterative([1, 2, 5, 8, 9], 7) returns -1
     """
-    # TODO: Implement iterative binary search that uses iteration to find the target. Return the index if found and -1 if not found.
-    
-    pass # Delete pass and write your code here
+    left = 0
+    right = len(data) - 1
+
+    while left <= right:
+        mid = (left + right) // 2
+
+        if data[mid] == target:
+            return mid
+        elif data[mid] < target:
+            left = mid + 1
+        else:
+            right = mid - 1
+
+    return -1
 
 
 # ============================================================================
@@ -78,34 +63,30 @@ def binary_search_recursive(data, target, left=None, right=None):
     """
     Search for target in SORTED data using recursive binary search.
     
-    This is the recursive version of binary search, which naturally expresses
-    the divide-and-conquer approach.
-    
-    Args:
-        data (list): SORTED list to search
-        target: Item to find
-        left (int): Left boundary of search space (defaults to 0)
-        right (int): Right boundary of search space (defaults to len(data)-1)
-    
     Returns:
         int: Index of target if found, -1 if not found
-    
-    Time Complexity: O(log n)
-    Space Complexity: O(log n) - recursion call stack
-    
-    Example:
-        binary_search_recursive([1, 2, 5, 8, 9], 8) returns 3
     """
     # Handle default parameters on first call
     if left is None:
         left = 0
     if right is None:
         right = len(data) - 1
-    
-    # TODO: Implement recursive binary search that uses recursion to find the target. Return the index if found and -1 if not found. Note that default parameters are already handled above.
 
-    
-    pass # Delete pass and write your code here
+    # Base case: search space is empty
+    if left > right:
+        return -1
+
+    mid = (left + right) // 2
+
+    # Base case: found target
+    if data[mid] == target:
+        return mid
+
+    # Recursive case: search right half
+    if data[mid] < target:
+        return binary_search_recursive(data, target, mid + 1, right)
+    else:
+        return binary_search_recursive(data, target, left, mid - 1)
 
 
 # ============================================================================
@@ -169,11 +150,6 @@ def benchmark_algorithm(search_func, data, targets):
     """
     Benchmark a search algorithm on given data with multiple targets.
     
-    Args:
-        search_func: The search function to test
-        data: The dataset to search
-        targets: List of items to search for
-    
     Returns:
         float: Average time per search in seconds
     """
@@ -218,9 +194,8 @@ def benchmark_all_datasets():
         
         # For unsorted data, sort it first for binary search
         if "unsorted" in description.lower() or "small config" in description.lower():
-            sorted_data = sorted(data)
             sort_start = time.time()
-            sorted(data)
+            sorted_data = sorted(data)
             sort_time = time.time() - sort_start
             print(f"  Time to sort data:          {sort_time*1000:.2f} ms (one-time cost)")
         else:
@@ -278,13 +253,8 @@ def analyze_preprocessing_costs():
 
 
 if __name__ == "__main__":
-    print("SEARCH ASSIGNMENT - STARTER CODE")
-    print("Implement the search functions above, then run tests.\n")
+    print("SEARCH ASSIGNMENT - COMPLETED CODE\n")
     
-    # Uncomment these as you complete each part:
-    
-    # test_search_correctness()
-    # benchmark_all_datasets()
-    # analyze_preprocessing_costs()
-    
-    print("\n⚠ Uncomment the test functions in the main block to run benchmarks!")
+    test_search_correctness()
+    benchmark_all_datasets()
+    analyze_preprocessing_costs()
